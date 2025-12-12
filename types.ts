@@ -19,10 +19,57 @@ export enum MatchEventType {
   YELLOW_CARD = 'YELLOW',
   RED_CARD = 'RED',
   HALF_TIME = 'HALF',
-  FULL_TIME = 'END'
+  FULL_TIME = 'END',
+  SUBSTITUTION = 'SUB',
+  INJURY = 'INJURY'
+}
+
+export enum NewsType {
+  MATCH = 'MATCH',
+  TRANSFER = 'TRANSFER',
+  CLUB = 'CLUB',
+  LEAGUE = 'LEAGUE'
 }
 
 // Interfaces
+export interface NewsItem {
+  id: string;
+  week: number;
+  type: NewsType;
+  title: string;
+  content: string;
+  timestamp: number;
+}
+
+export interface DetailedStats {
+  acceleration: number;
+  sprintSpeed: number;
+  agility: number;
+  balance: number;
+  stamina: number;
+  strength: number;
+  composure: number;
+  positioning: number;
+  vision: number;
+  ballControl: number;
+  dribbling: number;
+  crossing: number;
+  shortPassing: number;
+  longPassing: number;
+  finishing: number;
+  shotPower: number;
+  longShots: number;
+  volleys: number;
+  penalties: number;
+  heading: number;
+  marking: number;
+  standingTackle: number;
+  slidingTackle: number;
+  interceptions: number;
+  reflexes: number; // GK
+  handling: number; // GK
+}
+
 export interface Player {
   id: string;
   name: string;
@@ -33,7 +80,19 @@ export interface Player {
   morale: number; // 0-100
   energy: number; // 0-100
   value: number;
+  
+  // Contract
   wage: number;
+  contractLength: number; // Years
+  
+  // Status
+  isInjured: boolean;
+  injuryDuration: number; // Weeks
+
+  // Attributes
+  detailedStats: DetailedStats;
+  
+  // Aggregated Stats (Calculated from detailed)
   stats: {
     pac: number;
     sho: number;
@@ -42,6 +101,7 @@ export interface Player {
     def: number;
     phy: number;
   };
+  
   seasonStats: {
     goals: number;
     assists: number;
@@ -57,6 +117,7 @@ export interface Team {
   players: Player[];
   tactics: Tactics;
   budget: number;
+  stadiumLevel: number; // New: Supports stadium upgrades
   wins: number;
   draws: number;
   losses: number;
@@ -96,4 +157,6 @@ export interface GameState {
   userTeamId: string;
   league: Team[];
   history: MatchResult[];
+  transferMarket: Player[];
+  news: NewsItem[];
 }
